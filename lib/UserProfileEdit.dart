@@ -17,6 +17,8 @@ class _UserProfileEditState extends State<UserProfileEdit> {
   String email = "";
   String sportEvent = "";
   String duration = "";
+  String eventtype = "";
+  String age = "";
 
   @override
   void initState() {
@@ -56,6 +58,8 @@ class _UserProfileEditState extends State<UserProfileEdit> {
       'email': email,
       'sportEvent': sportEvent,
       'duration': duration,
+      'age':age,
+      'event type': eventtype
     });
   }
 
@@ -148,7 +152,10 @@ class _UserProfileEditState extends State<UserProfileEdit> {
                 end: Alignment.bottomCenter,
               ),
             ),
-            child: SingleChildScrollView( // Allow scrolling for long content
+
+
+            child: SingleChildScrollView(
+              // Allow scrolling for long content
               child: Column(
                 children: [
                   Text(
@@ -172,9 +179,12 @@ class _UserProfileEditState extends State<UserProfileEdit> {
                   SizedBox(height: 40),
 
                   TextField(
+
                     controller: TextEditingController(text: username),
                     decoration: InputDecoration(
+
                       hintText: 'Username',
+
                     ),
                     onChanged: (value) => setState(() => username = value),
                   ),
@@ -194,7 +204,7 @@ class _UserProfileEditState extends State<UserProfileEdit> {
 
                     decoration: InputDecoration(
                       hintText:  '100M 200M 800M ',
-                      labelText:'Enter event',
+                      //labelText:'$email',
 
 
 
@@ -212,6 +222,31 @@ class _UserProfileEditState extends State<UserProfileEdit> {
                     ),
                     onChanged: (value) => setState(() => duration = value),
                   ),
+                  SizedBox(height: 20),
+
+                  TextField(
+
+                    controller: TextEditingController(text: age),
+                    decoration: InputDecoration(
+
+                      hintText: 'Age',
+                    ),
+                    onChanged: (value) => setState(() => age = value),
+                  ),
+
+                  SizedBox(height: 20),
+
+                  TextField(
+
+                    controller: TextEditingController(text: eventtype),
+                    decoration: InputDecoration(
+
+                      hintText: 'Event type',
+                    ),
+                    onChanged: (value) => setState(() => eventtype = value),
+                  ),
+
+
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: updateUserData,

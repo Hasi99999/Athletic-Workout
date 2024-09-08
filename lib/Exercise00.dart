@@ -197,7 +197,7 @@ class _ExercisePageState extends State<ExercisePage> {
                       ),
                       SizedBox(height: 16.0),
                       StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance.collection('workouts').snapshots(),
+                        stream: FirebaseFirestore.instance.collection('workouts').where('type', isEqualTo: 'speed').snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             final workouts = snapshot.data?.docs;
@@ -219,6 +219,7 @@ class _ExercisePageState extends State<ExercisePage> {
                           }
                         },
                       ),
+
                     ],
                   )
                       : Text('No data available'),
@@ -245,7 +246,7 @@ class _ExercisePageState extends State<ExercisePage> {
                       ),
                       SizedBox(height: 16.0),
                       StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance.collection('workouts').snapshots(),
+                        stream: FirebaseFirestore.instance.collection('workouts').where('type', isEqualTo: 'speed').snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             final workouts = snapshot.data?.docs;
@@ -267,6 +268,29 @@ class _ExercisePageState extends State<ExercisePage> {
                           }
                         },
                       ),
+                      // StreamBuilder<QuerySnapshot>(
+                      //   stream: FirebaseFirestore.instance.collection('workouts').snapshots(),
+                      //   builder: (context, snapshot) {
+                      //     if (snapshot.hasData) {
+                      //       final workouts = snapshot.data?.docs;
+                      //       return ListView.builder(
+                      //         shrinkWrap: true,
+                      //         physics: NeverScrollableScrollPhysics(),
+                      //         itemCount: workouts?.length,
+                      //         itemBuilder: (context, index) {
+                      //           var workout = workouts![index];
+                      //           List<dynamic> exercises = workout[workOut2!] as List<dynamic>;
+                      //           return Column(
+                      //             crossAxisAlignment: CrossAxisAlignment.start,
+                      //             children: exercises.map((exercise) => Text(exercise.toString())).toList(),
+                      //           );
+                      //         },
+                      //       );
+                      //     } else {
+                      //       return Text('Loading workouts...');
+                      //     }
+                      //   },
+                      // ),
                     ],
                   )
                       : Text('No data available'),

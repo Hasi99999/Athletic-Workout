@@ -108,9 +108,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color.AppColor.homePageBackground,
-      body: Stack(
-        children: [
-          Container(
+      body: SingleChildScrollView(
+
+          child : Padding(
+
             padding: const EdgeInsets.only(top: 70, left: 10, right: 10),
             child: Column(
               children: [
@@ -370,98 +371,98 @@ class _HomePageState extends State<HomePage> {
                       ),
                   ],
                 ),
-                Expanded(
-                    child: OverflowBox(
-                      maxWidth: MediaQuery.of(context).size.width,
-                      child: MediaQuery.removePadding(
-                        removeTop: true,
-                        context: context,
-                        child: ListView.builder(
-                            itemCount: (info.length.toDouble() / 2).toInt(), //2
-                            itemBuilder: (_, i) {
-                              int a = 2 * i;
-                              int b = 2 * i + 1;
-                              return Row(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(bottom: 5),
-                                    height: 170,
-                                    width: (MediaQuery.of(context).size.width - 90) / 2,
-                                    margin: const EdgeInsets.only(
-                                        left: 30, bottom: 15, right: 15, top: 15),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(15),
-                                        image: DecorationImage(
-                                            image: AssetImage(info[a]['img'])),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              blurRadius: 3,
-                                              offset: Offset(5, 5),
-                                              color: color.AppColor.gradientSecond
-                                                  .withOpacity(0.1)),
-                                          BoxShadow(
-                                              blurRadius: 3,
-                                              offset: Offset(-5, -5),
-                                              color: color.AppColor.gradientSecond
-                                                  .withOpacity(0.1))
-                                        ]),
-                                    child: Center(
-                                      child: Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          info[a]["title"],
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: color.AppColor.homePageDetail),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(bottom: 5),
-                                    height: 170,
-                                    width: (MediaQuery.of(context).size.width - 90) / 2,
-                                    margin: const EdgeInsets.only(
-                                        left: 15, bottom: 15, right: 30, top: 15),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(15),
-                                        image: DecorationImage(
-                                            image: AssetImage(info[b]['img'])),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              blurRadius: 3,
-                                              offset: Offset(5, 5),
-                                              color: color.AppColor.gradientSecond
-                                                  .withOpacity(0.1)),
-                                          BoxShadow(
-                                              blurRadius: 3,
-                                              offset: Offset(-5, -5),
-                                              color: color.AppColor.gradientSecond
-                                                  .withOpacity(0.1))
-                                        ]),
-                                    child: Center(
-                                      child: Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          info[b]["title"],
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: color.AppColor.homePageDetail),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              );
-                            }),
-                      ),
-                    ))
+                // Expanded(
+                //     child: OverflowBox(
+                //       maxWidth: MediaQuery.of(context).size.width,
+                //       child: MediaQuery.removePadding(
+                //         removeTop: true,
+                //         context: context,
+                //         child: ListView.builder(
+                //             itemCount: (info.length.toDouble() / 2).toInt(), //2
+                //             itemBuilder: (_, i) {
+                //               int a = 2 * i;
+                //               int b = 2 * i + 1;
+                //               return Row(
+                //                 children: [
+                //                   Container(
+                //                     padding: EdgeInsets.only(bottom: 5),
+                //                     height: 170,
+                //                     width: (MediaQuery.of(context).size.width - 90) / 2,
+                //                     margin: const EdgeInsets.only(
+                //                         left: 30, bottom: 15, right: 15, top: 15),
+                //                     decoration: BoxDecoration(
+                //                         color: Colors.white,
+                //                         borderRadius: BorderRadius.circular(15),
+                //                         image: DecorationImage(
+                //                             image: AssetImage(info[a]['img'])),
+                //                         boxShadow: [
+                //                           BoxShadow(
+                //                               blurRadius: 3,
+                //                               offset: Offset(5, 5),
+                //                               color: color.AppColor.gradientSecond
+                //                                   .withOpacity(0.1)),
+                //                           BoxShadow(
+                //                               blurRadius: 3,
+                //                               offset: Offset(-5, -5),
+                //                               color: color.AppColor.gradientSecond
+                //                                   .withOpacity(0.1))
+                //                         ]),
+                //                     child: Center(
+                //                       child: Align(
+                //                         alignment: Alignment.bottomCenter,
+                //                         child: Text(
+                //                           info[a]["title"],
+                //                           style: TextStyle(
+                //                               fontSize: 20,
+                //                               color: color.AppColor.homePageDetail),
+                //                         ),
+                //                       ),
+                //                     ),
+                //                   ),
+                //                   Container(
+                //                     padding: EdgeInsets.only(bottom: 5),
+                //                     height: 170,
+                //                     width: (MediaQuery.of(context).size.width - 90) / 2,
+                //                     margin: const EdgeInsets.only(
+                //                         left: 15, bottom: 15, right: 30, top: 15),
+                //                     decoration: BoxDecoration(
+                //                         color: Colors.white,
+                //                         borderRadius: BorderRadius.circular(15),
+                //                         image: DecorationImage(
+                //                             image: AssetImage(info[b]['img'])),
+                //                         boxShadow: [
+                //                           BoxShadow(
+                //                               blurRadius: 3,
+                //                               offset: Offset(5, 5),
+                //                               color: color.AppColor.gradientSecond
+                //                                   .withOpacity(0.1)),
+                //                           BoxShadow(
+                //                               blurRadius: 3,
+                //                               offset: Offset(-5, -5),
+                //                               color: color.AppColor.gradientSecond
+                //                                   .withOpacity(0.1))
+                //                         ]),
+                //                     child: Center(
+                //                       child: Align(
+                //                         alignment: Alignment.bottomCenter,
+                //                         child: Text(
+                //                           info[b]["title"],
+                //                           style: TextStyle(
+                //                               fontSize: 20,
+                //                               color: color.AppColor.homePageDetail),
+                //                         ),
+                //                       ),
+                //                     ),
+                //                   )
+                //                 ],
+                //               );
+                //             }),
+                //       ),
+                //     )
+                // )
               ],
             ),
           ),
-        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0, // Set initial index

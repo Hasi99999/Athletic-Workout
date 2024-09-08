@@ -65,7 +65,7 @@ class UserProfile extends StatelessWidget {
         children: [
           SingleChildScrollView(
             child: Container(
-              padding: EdgeInsets.only(top: 100),
+              padding: EdgeInsets.only(top: 60),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [color.AppColor.gradientFirst, Colors.white],
@@ -113,70 +113,115 @@ class UserProfile extends StatelessWidget {
                         Column(
                           children: [
             
-                            TextField(
-            
-                              decoration: InputDecoration(
-                                labelText: ' Username: ${userData['username']}'
-            
-                                ,
-                              ),
-                            ),
-                            // Text(
-                            //   'Username: ${userData['username']}',
-                            //   style: TextStyle(fontSize: 18),
+                            // TextField(
+                            //
+                            //   decoration: InputDecoration(
+                            //     labelText: ' Username: ${userData['username']}'
+                            //
+                            //     ,
+                            //   ),
                             // ),
+                            Text(
+                              ' Username: ${userData['username']}',
+                              style: TextStyle(fontSize: 18),
+                            ),
                           ],
                         ),
                         SizedBox(height: 20),
                         Column(
                           children: [
-                          TextField(
-            
-                            decoration: InputDecoration(
-                              labelText: ' Email:  ${userData['email']}'
-            
-                            ,
+                          // TextField(
+                          //
+                          //   decoration: InputDecoration(
+                          //     labelText: ' Email:  ${userData['email']}'
+                          //
+                          //   ,
+                          //   ),
+                          // ),
+                            Text(
+                              ' Email:  ${userData['email']}',
+                              style: TextStyle(fontSize: 18),
                             ),
-                          ),
-                            // Text(
-                            //   'Email: ${userData['email']}',
-                            //   style: TextStyle(fontSize: 18),
-                            // ),
                           ],
                         ),
                         SizedBox(height: 20),
                         Column(
                           children: [
-                            TextField(
-            
-                              decoration: InputDecoration(
-                                labelText: '  Sport Event: ${userData['sportEvent']}'
-            
-                                ,
-                              ),
-                            ),
-                            // Text(
-                            //   'Sport Event: ${userData['sportEvent']}',
-                            //   style: TextStyle(fontSize: 18),
+                            // TextField(
+                            //
+                            //   decoration: InputDecoration(
+                            //     labelText: '  Sport Event: ${userData['sportEvent']}'
+                            //
+                            //     ,
+                            //   ),
                             // ),
+                            Text(
+                              '  Sport Event: ${userData['sportEvent']}',
+                              style: TextStyle(fontSize: 18),
+                            ),
                           ],
                         ),
                         SizedBox(height: 20),
                         Column(
                           children: [
-                            TextField(
-            
-                              decoration: InputDecoration(
-                                labelText: '  Duration: ${userData['competitionDuration']}'
-            
-                                ,
-                              ),
-                            ),
-                            // Text(
-                            //   'Duration: ${userData['duration']}',
-                            //   style: TextStyle(fontSize: 18),
+                            // TextField(
+                            //
+                            //   decoration: InputDecoration(
+                            //     labelText: '  Duration: ${userData['competitionDuration']}'
+                            //
+                            //     ,
+                            //   ),
                             // ),
+                            Text(
+                              '  Duration: ${userData['competitionDuration']}',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+
+
                             SizedBox(height: 20),
+                            Column(
+                              children: [
+
+                                // TextField(
+                                //
+                                //   // decoration:TextDecorationStyle(
+                                //   //   labelText: ' Age: ${userData['age']}'
+                                //   //
+                                //   //   ,
+                                //   // ),
+                                // ),
+
+                                Text(
+                                  ' Age: ${userData['age']}',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: 20),
+                            Column(
+                              children: [
+
+                                // TextField(
+                                //
+                                //   decoration: InputDecoration(
+                                //     labelText: ' Event Type: ${userData['event type']}'
+                                //
+                                //     ,
+                                //   ),
+                                // ),
+                                Text(
+                                  ' Event Type: ${userData['event type']}',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: 40),
+
+
                             ElevatedButton(
                               onPressed: () {
                                 Navigator.push(
@@ -188,8 +233,7 @@ class UserProfile extends StatelessWidget {
                             )
                           ],
                         ),
-                      ],
-                    ),
+
                   );
                 },
               ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'SignInScreen.dart'; // Ensure this is the correct path to your SignInScreen file
+import "package:intl/intl.dart";
+
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -20,6 +22,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _email = '';
   String _password = '';
   String _errorMessage = '';
+  String _StartingDay ="";
+  String _eventType ="Running";
+
+  DateTime? _selectedDate;
+  final _dateController = TextEditingController();
 
   Future<void> _signUp() async {
     if (_formKey.currentState!.validate()) {
@@ -37,6 +44,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           'competitionDuration': _competitionDuration,
           'age': _age,
           'email': _email,
+          'Startingday':_StartingDay,
+          'event type':_eventType,
         });
 
         // Navigate to the sign-in screen
@@ -94,6 +103,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               DropdownButtonFormField<String>(
+                decoration: InputDecoration(labelText: 'Event Type'),
+                value: _eventType,
+                items: [
+                  'Running', 'Jumping', 'Trowing'
+                ].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    _eventType = newValue!;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select a Event Type';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _eventType = value!;
+                },
+              ),
+              DropdownButtonFormField<String>(
                 decoration: InputDecoration(labelText: 'Sport Event'),
                 value: _sportEvent,
                 items: [
@@ -145,6 +180,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _competitionDuration = value!;
                 },
               ),
+
               TextFormField(
                 decoration: InputDecoration(labelText: 'Age'),
                 validator: (value) {
@@ -169,7 +205,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _email = value!;
                 },
               ),
-              TextFormField(
+
+
+    TextFormField(
+      controller: _dateController,
+      decoration: InputDecoration(labelText: 'Enter When you start your Workout'),
+      readOnly: true, // Make the text field read-only
+      onTap: () async {
+        // Show the date picker when the text field is tapped
+        DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2101),
+        );
+
+        if (pickedDate != null) {
+          setState(() {
+            _selectedDate = pickedDate;
+            _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+          });
+        }
+      },
+      validator: (value) {
+        if (_selectedDate == null) {
+          return 'Enter your Workout Starting Day';
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _StartingDay = _selectedDate.toString();
+      },
+    ),
+
+    TextFormField(
                 decoration: InputDecoration(labelText: 'Password'),
                 obscureText: true,
                 validator: (value) {

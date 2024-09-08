@@ -18,7 +18,7 @@ class WarmUpPage extends StatelessWidget {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('workouts')
-          .where('type', isEqualTo: 'speed')
+          .where('type', isEqualTo: 'Running')
           .get();
 
       return querySnapshot.docs
@@ -109,7 +109,7 @@ class WarmUpPage extends StatelessWidget {
                             itemCount: workouts.length,
                             itemBuilder: (context, index) {
                               var workoutField = workouts[index];
-                              List<dynamic> exercises = workoutField['w01'] as List<dynamic>;
+                              List<dynamic> exercises = workoutField['wormup'] as List<dynamic>;
                               // String workoutField = workouts[index]['w01'] ?? 'Unknown Workout';
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
