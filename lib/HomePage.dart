@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   String? Startingday;
   DateTime? startingDay;
   int? daysLeft;
+  int? practicedDays;
   User? user = FirebaseAuth.instance.currentUser;
 
   _initData() {
@@ -70,7 +71,14 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
-
+  _getpracticedDay() async {
+    if (user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user!.uid).get();
+      setState(() {
+        practicedDays = userDoc['practicedDays'];
+      });
+    }
+  }
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
@@ -95,6 +103,7 @@ class _HomePageState extends State<HomePage> {
     _initData();
     _getStartingDay();
     _getUsername();
+    _getpracticedDay();
   }
 
   Future<void> _signOut() async {
@@ -191,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 20),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 200,
+                  height: 150,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
                           colors: [
@@ -223,14 +232,7 @@ class _HomePageState extends State<HomePage> {
                               fontSize: 16,
                               color: color.AppColor.homePageContainerTextSmall),
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          "800 Meter workout",
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: color.AppColor.homePageContainerTextSmall),
-                        ),
-                        const SizedBox(height: 20),
+
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -238,15 +240,11 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 const SizedBox(height: 80),
-                                Icon(
-                                  Icons.add_card_sharp,
-                                  size: 20,
-                                  color: color.AppColor.homePageContainerTextSmall,
-                                ),
+
                                 Text(
-                                  "10 repetition",
+                                  "Meet workouts",
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 25,
                                       color: color.AppColor.homePageContainerTextSmall),
                                 ),
                               ],
@@ -363,6 +361,28 @@ class _HomePageState extends State<HomePage> {
                     if (daysLeft != null)
                       Text(
                         "${1 + daysLeft!} day",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500,
+                          color: color.AppColor.homePageTitle,
+                        ),
+                      ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "You have practiced  ",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500,
+                          color: color.AppColor.homePageTitle),
+                    ),
+                    SizedBox(width: 10),
+                    if (practicedDays != null)
+                      Text(
+                        "${0+ practicedDays!} days",
                         style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w500,

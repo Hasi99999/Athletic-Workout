@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'colors.dart' as color;
+import 'video_guide_wormup.dart';  // Import the VideoGuidePage
 
 class WarmUpPage extends StatelessWidget {
   const WarmUpPage({super.key});
@@ -14,22 +15,54 @@ class WarmUpPage extends StatelessWidget {
     );
   }
 
-  Future<List<Map<String, dynamic>>> _getFastWorkouts() async {
+  Future<String?> getCurrentUserEventType() async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('workouts')
-          .where('type', isEqualTo: 'Running')
+      // Get the current logged-in user ID
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId == null) {
+        // If no user is logged in, return null or handle accordingly
+        return null;
+      }
+
+      // Reference to the Firestore document for the current user
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
           .get();
 
-      return querySnapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
+      // Check if the user document exists
+      if (userDoc.exists) {
+        // Retrieve the 'eventType' field from the user's document
+        String? eventType = userDoc.get('event type');
+        return eventType;
+      } else {
+        // If the document doesn't exist, handle accordingly
+        return null;
+      }
     } catch (e) {
-      print("Error fetching workouts: $e");
-      return [];
+      // Handle any errors
+      print('Error fetching user event type: $e');
+      return null;
     }
   }
 
+  Future<List<Map<String, dynamic>>> _getFastWorkouts(String? eventType) async {
+    try {
+      // Query Firestore with the user's event type
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('wormups')
+          .where('type', isEqualTo: eventType)
+          .get();
+
+      List<Map<String, dynamic>> workouts = querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+      return workouts;
+    } catch (e) {
+      throw Exception('Failed to load workouts: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +90,7 @@ class WarmUpPage extends StatelessWidget {
         ],
       ),
       body: Container(
-        height: 1000,
+        height: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -85,43 +118,80 @@ class WarmUpPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 16.0),
-                  // New container with white background
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => VideoGuidePage()),
+                      );
+                    },
+                    child: Text("Go to Warmup Video Guide"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      textStyle: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
                   Container(
                     padding: EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.white38,
                       borderRadius: BorderRadius.all(Radius.circular(8.0)),
                     ),
-                    child: FutureBuilder<List<Map<String, dynamic>>>(
-                      future: _getFastWorkouts(),
+                    child: FutureBuilder<String?>(
+                      future: getCurrentUserEventType(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           return Center(child: Text('Error: ${snapshot.error}'));
-                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return Center(child: Text('No fast workouts found.'));
                         } else {
-                          List<Map<String, dynamic>> workouts = snapshot.data!;
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: workouts.length,
-                            itemBuilder: (context, index) {
-                              var workoutField = workouts[index];
-                              List<dynamic> exercises = workoutField['wormup'] as List<dynamic>;
-                              // String workoutField = workouts[index]['w01'] ?? 'Unknown Workout';
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: exercises.map((exercise) => Text(exercise.toString())).toList(),
-                              );
+                          String? eventType = snapshot.data;
+                          if (eventType == null) {
+                            return Center(child: Text('No event type found.'));
+                          } else {
+                            return FutureBuilder<List<Map<String, dynamic>>>(
+                              future: _getFastWorkouts(eventType),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return Center(child: CircularProgressIndicator());
+                                } else if (snapshot.hasError) {
+                                  return Center(child: Text('Error: ${snapshot.error}'));
+                                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                  return Center(child: Text('No fast workouts found.'));
+                                } else {
+                                  List<Map<String, dynamic>> workouts = snapshot.data!;
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: workouts.length,
+                                    itemBuilder: (context, index) {
+                                      var workoutField = workouts[index];
+                                      List<dynamic> exercises = (workoutField['dynamic wormup'] is List<dynamic>)
+                                          ? workoutField['dynamic wormup'] as List<dynamic>
+                                          : []; // Use an empty list if dynamicwormups is not a List
 
-                            },
-                          );
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            exercises.join('\n\n'), // Join exercises with newline
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          SizedBox(height: 16.0), // Optional: space between different workouts
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              },
+                            );
+                          }
                         }
                       },
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -131,7 +201,6 @@ class WarmUpPage extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 2, // Set initial index to Warm Up Page
         onTap: (index) {
-          // Handle navigation here based on index
           switch (index) {
             case 0:
               Navigator.pushNamed(context, '/home');

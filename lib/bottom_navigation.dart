@@ -12,7 +12,7 @@ class BottomNavigationWidget extends StatelessWidget {
       backgroundColor: Colors.blue, // Set the background color to blue
       currentIndex: currentIndex,
       onTap: onTabTapped,
-      selectedItemColor: Colors.white, // Selected item color
+      selectedItemColor: Colors.blue, // Selected item color
       unselectedItemColor: Colors.white70, // Unselected item color
       items: [
         BottomNavigationBarItem(

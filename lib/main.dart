@@ -11,6 +11,7 @@ import 'SignUpScreen.dart';
 import 'UserProfile.dart';
 import 'Exercise.dart';
 import 'WarmUp.dart';
+import 'video_guide_wormup.dart';  // Import the VideoGuidePage
 
 
 void main() async {
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/userProfile': (context) => UserProfile(),
         '/exercise': (context) => ExercisePage(),
         '/warmUp': (context) => WarmUpPage(),
+        '/videoGuide': (context) => VideoGuidePage(),
 
       },
     );

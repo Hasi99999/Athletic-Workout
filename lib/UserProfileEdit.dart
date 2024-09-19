@@ -13,17 +13,39 @@ class _UserProfileEditState extends State<UserProfileEdit> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user;
   String userId = "";
-  String username = "";
-  String email = "";
-  String sportEvent = "";
-  String duration = "";
-  String eventtype = "";
-  String age = "";
+
+  // Controllers for the TextFields
+  late TextEditingController usernameController;
+  late TextEditingController emailController;
+  late TextEditingController sportEventController;
+  late TextEditingController competitionDurationController;
+  late TextEditingController ageController;
+  late TextEditingController eventTypeController;
 
   @override
   void initState() {
     super.initState();
     getCurrentUser();
+
+    // Initialize controllers
+    usernameController = TextEditingController();
+    emailController = TextEditingController();
+    sportEventController = TextEditingController();
+    competitionDurationController = TextEditingController();
+    ageController = TextEditingController();
+    eventTypeController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // Dispose controllers
+    usernameController.dispose();
+    emailController.dispose();
+    sportEventController.dispose();
+    competitionDurationController.dispose();
+    ageController.dispose();
+    eventTypeController.dispose();
+    super.dispose();
   }
 
   void getCurrentUser() async {
@@ -40,10 +62,12 @@ class _UserProfileEditState extends State<UserProfileEdit> {
     if (docSnap.exists) {
       final data = docSnap.data()!;
       setState(() {
-        username = data['username'];
-        email = data['email'];
-        sportEvent = data['sportEvent'];
-        duration = data['duration'];
+        usernameController.text = data['username'];
+        emailController.text = data['email'];
+        sportEventController.text = data['sportEvent'];
+        competitionDurationController.text = data['competitionDuration'];
+        ageController.text = data['age'] ?? '';
+        eventTypeController.text = data['event type'] ?? '';
       });
     }
   }
@@ -54,12 +78,12 @@ class _UserProfileEditState extends State<UserProfileEdit> {
 
     final docRef = FirebaseFirestore.instance.collection('users').doc(userId);
     await docRef.update({
-      'username': username,
-      'email': email,
-      'sportEvent': sportEvent,
-      'duration': duration,
-      'age':age,
-      'event type': eventtype
+      'username': usernameController.text,
+      'email': emailController.text,
+      'sportEvent': sportEventController.text,
+      'competitionDuration': competitionDurationController.text,
+      'age': ageController.text,
+      'event type': eventTypeController.text
     });
   }
 
@@ -72,18 +96,8 @@ class _UserProfileEditState extends State<UserProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
-
     if (user == null) {
-      // User is not logged in
-      // Redirect to login screen or handle as needed
       return Scaffold(
-
-
         appBar: AppBar(
           title: Text(
             "Athletic Workout",
@@ -104,19 +118,15 @@ class _UserProfileEditState extends State<UserProfileEdit> {
                 ),
               ),
             ),
-
           ],
         ),
-
-
         body: Center(
-          child: Text("User not logged in"),
+          child: Text(""),
         ),
       );
     }
 
     return Scaffold(
-
       appBar: AppBar(
         title: Text(
           "Athletic Workout",
@@ -137,10 +147,8 @@ class _UserProfileEditState extends State<UserProfileEdit> {
               ),
             ),
           ),
-
         ],
       ),
-
       body: Stack(
         children: [
           Container(
@@ -152,10 +160,7 @@ class _UserProfileEditState extends State<UserProfileEdit> {
                 end: Alignment.bottomCenter,
               ),
             ),
-
-
             child: SingleChildScrollView(
-              // Allow scrolling for long content
               child: Column(
                 children: [
                   Text(
@@ -177,76 +182,53 @@ class _UserProfileEditState extends State<UserProfileEdit> {
                     ),
                   ),
                   SizedBox(height: 40),
-
                   TextField(
-
-                    controller: TextEditingController(text: username),
+                    controller: usernameController,
                     decoration: InputDecoration(
-
                       hintText: 'Username',
-
                     ),
-                    onChanged: (value) => setState(() => username = value),
+                    onChanged: (value) => setState(() => usernameController.text = value),
                   ),
-
                   SizedBox(height: 20),
                   TextField(
-                    controller: TextEditingController(text: email),
+                    controller: emailController,
                     decoration: InputDecoration(
                       hintText: 'Email',
                     ),
-                    onChanged: (value) => setState(() => email = value),
+                    onChanged: (value) => setState(() => emailController.text = value),
                   ),
                   SizedBox(height: 20),
-
                   TextField(
-                    controller: TextEditingController(text: sportEvent),
-
+                    controller: sportEventController,
                     decoration: InputDecoration(
-                      hintText:  '100M 200M 800M ',
-                      //labelText:'$email',
-
-
-
+                      hintText: '100M 200M 800M',
                     ),
-                    onChanged: (value) => setState(() => sportEvent = value),
+                    onChanged: (value) => setState(() => sportEventController.text = value),
                   ),
                   SizedBox(height: 20),
-
                   TextField(
-
-                    controller: TextEditingController(text: duration),
+                    controller: competitionDurationController,
                     decoration: InputDecoration(
-
-                      hintText: 'Duration',
+                      hintText: 'Competition Duration',
                     ),
-                    onChanged: (value) => setState(() => duration = value),
+                    onChanged: (value) => setState(() => competitionDurationController.text = value),
                   ),
                   SizedBox(height: 20),
-
                   TextField(
-
-                    controller: TextEditingController(text: age),
+                    controller: ageController,
                     decoration: InputDecoration(
-
                       hintText: 'Age',
                     ),
-                    onChanged: (value) => setState(() => age = value),
+                    onChanged: (value) => setState(() => ageController.text = value),
                   ),
-
                   SizedBox(height: 20),
-
                   TextField(
-
-                    controller: TextEditingController(text: eventtype),
+                    controller: eventTypeController,
                     decoration: InputDecoration(
-
-                      hintText: 'Event type',
+                      hintText: 'Event Type',
                     ),
-                    onChanged: (value) => setState(() => eventtype = value),
+                    onChanged: (value) => setState(() => eventTypeController.text = value),
                   ),
-
-
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: updateUserData,
@@ -256,23 +238,7 @@ class _UserProfileEditState extends State<UserProfileEdit> {
               ),
             ),
           ),
-          // Positioned(
-          //   left: 0,
-          //   right: 0,
-          //   bottom: 0,
-          //
-          //
-          //   child: Opacity(
-          //     opacity: 0.7, // Adjust opacity level as needed
-          //     child: Image.asset(
-          //       'assets/running-7056590_1280.jpg', // Replace with your image path
-          //       fit: BoxFit.cover,
-          //       height: 250, // Adjust height as needed
-          //     ),
-          //   ),
-          // ),
         ],
-
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0, // Set initial index
@@ -280,19 +246,15 @@ class _UserProfileEditState extends State<UserProfileEdit> {
           // Handle navigation here based on index
           switch (index) {
             case 0:
-            // Navigate to Home Page
               Navigator.pushNamed(context, '/home');
               break;
             case 1:
-            // Navigate to Exercise Page
               Navigator.pushNamed(context, '/exercise');
               break;
             case 2:
-            // Navigate to Warm Up Page
               Navigator.pushNamed(context, '/warmUp');
               break;
             case 3:
-            // Navigate to User Profile Page
               Navigator.pushNamed(context, '/userProfile');
               break;
             default:
@@ -301,24 +263,23 @@ class _UserProfileEditState extends State<UserProfileEdit> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, color:Colors.black,),
+            icon: Icon(Icons.home, color: Colors.black),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center, color:Colors.black),
+            icon: Icon(Icons.fitness_center, color: Colors.black),
             label: 'Exercise',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.directions_run, color:Colors.black),
+            icon: Icon(Icons.directions_run, color: Colors.black),
             label: 'Warm Up',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle, color:Colors.black),
+            icon: Icon(Icons.account_circle, color: Colors.black),
             label: 'Profile',
           ),
         ],
       ),
     );
-
   }
 }
